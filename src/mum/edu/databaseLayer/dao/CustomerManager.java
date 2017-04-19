@@ -1,8 +1,6 @@
 package mum.edu.databaseLayer.dao;
 
 import mum.edu.businesslogic.model.Customer;
-import mum.edu.databaseLayer.AbstractElement;
-import mum.edu.databaseLayer.IDataManager;
 
 import java.util.List;
 
@@ -19,6 +17,11 @@ public class CustomerManager implements IDataManager<Customer> {
 
     @Override
     public List<Customer> getElements() {
+        return null;
+    }
+
+    @Override
+    public List<Customer> getElements(Object obj1, Object obj2) {
         return null;
     }
 

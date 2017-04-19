@@ -1,7 +1,6 @@
 package mum.edu.databaseLayer.command;
 
-import mum.edu.databaseLayer.AbstractElement;
-import mum.edu.databaseLayer.IDataManager;
+import mum.edu.databaseLayer.dao.IDataManager;
 
 /**
  * Created by orifjon9 on 4/17/2017.

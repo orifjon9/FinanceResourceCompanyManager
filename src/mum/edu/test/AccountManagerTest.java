@@ -60,9 +60,9 @@ public class AccountManagerTest {
         acc2.setCurrency("EUR");
         acc2.setStartDate(LocalDate.parse("2015-01-25"));
         acc2.setEndDate(LocalDate.parse("2019-11-30"));
-        acc2.setInterestRate((long)2.21);
+        acc2.setInterestRate((float) 2.21);
         acc2.setType("credit");
-        acc2.setId(4);
+        acc2.setId(3);
 
         boolean result = accountManager.update(acc2);
 

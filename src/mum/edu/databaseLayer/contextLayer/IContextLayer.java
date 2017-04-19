@@ -1,6 +1,8 @@
-package mum.edu.databaseLayer;
+package mum.edu.databaseLayer.contextLayer;
 
-import mum.edu.businesslogic.model.Account;
+import mum.edu.databaseLayer.AbstractElement;
+import mum.edu.databaseLayer.ElementState;
+import mum.edu.databaseLayer.dao.IDataManager;
 import mum.edu.databaseLayer.command.DataInvoke;
 import mum.edu.databaseLayer.command.ICommand;
 import mum.edu.databaseLayer.command.StoreCommandFactory;
@@ -13,12 +15,11 @@ import java.util.List;
 public abstract class IContextLayer<T> {
     private DataInvoke dataInvoke = new DataInvoke();
 
-    public abstract void save(T value);
     public abstract T getElement(int id);
     public abstract List<T> getElements();
     public abstract IDataManager<T> getDataManager();
 
-    public void save(Account value) {
+    public void save(T value) {
         AbstractElement element = (AbstractElement) value;
 
         if (element == null) return;

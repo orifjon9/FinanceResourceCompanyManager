@@ -1,13 +1,11 @@
 package mum.edu.databaseLayer.dao;
-
 import mum.edu.businesslogic.model.Account;
 import mum.edu.databaseLayer.DBConnection;
-import mum.edu.databaseLayer.IDataManager;
 
 import java.sql.*;
-import java.text.spi.DateFormatProvider;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,29 +15,14 @@ public class AccountManager implements IDataManager<Account>{
 
     @Override
     public Account getElement(int id) {
-        try (Connection connection = DBConnection.SQLiteConnection();
-             Statement statement = connection.createStatement()) {
+        try (ResultSet resultSet = executeQuery("SELECT * FROM account WHERE accountid = " + id)) {
 
-            Class.forName("org.sqlite.JDBC");
-
-
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM account WHERE accountid = " + id);
-
-            Account account = new Account();
             while (resultSet.next()) {
+                return convertToAccount(resultSet);
 
-
-                account.setId(resultSet.getInt("accountid"));
-                account.setAccountNumber(resultSet.getInt("number"));
-                account.setStartDate(LocalDate.parse(resultSet.getString("startdate")));
-                account.setEndDate(LocalDate.parse(resultSet.getString("enddate")));
-                account.setInterestRate(resultSet.getFloat("interestrate"));
-                account.setType(resultSet.getString("type"));
-
-                break;
             }
 
-            return account;
+            return null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -47,6 +30,21 @@ public class AccountManager implements IDataManager<Account>{
 
     @Override
     public List<Account> getElements() {
+        List<Account> accounts = new ArrayList<>();
+        try (ResultSet resultSet = executeQuery("SELECT * FROM account")) {
+
+            while (resultSet.next()) {
+                accounts.add(convertToAccount(resultSet));
+            }
+
+            return accounts;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public List<Account> getElements(Object obj1, Object obj2) {
         return null;
     }
 
@@ -57,13 +55,8 @@ public class AccountManager implements IDataManager<Account>{
              PreparedStatement statement = connection.prepareStatement("INSERT INTO account(number, currency,  startdate, enddate, interestrate, type) VALUES(?,?,?,?,?,?);")) {
 
             Class.forName("org.sqlite.JDBC");
-           // statement.setInt(1, element.getId());
-            statement.setInt(1, element.getAccountNumber());
-            statement.setString(2, element.getCurrency());
-            statement.setString(3, element.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            statement.setString(4, element.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            statement.setFloat(5, element.getInterestRate());
-            statement.setString(6, element.getType());
+
+            setParameters(statement, element);
 
             return statement.executeUpdate() > 0;
 
@@ -80,12 +73,7 @@ public class AccountManager implements IDataManager<Account>{
 
             Class.forName("org.sqlite.JDBC");
 
-            statement.setInt(1, element.getAccountNumber());
-            statement.setString(2, element.getCurrency());
-            statement.setString(3, element.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            statement.setString(4, element.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            statement.setFloat(5, element.getInterestRate());
-            statement.setString(6, element.getType());
+            setParameters(statement, element);
             statement.setInt(7, element.getId());
 
             return statement.executeUpdate() > 0;
@@ -97,15 +85,28 @@ public class AccountManager implements IDataManager<Account>{
 
     @Override
     public boolean delete(Account element) {
-        try (Connection connection = DBConnection.SQLiteConnection();
-             Statement statement = connection.createStatement()) {
+        return executeUpdate("DELETE FROM account WHERE accountid = " + element.getId()) > 0;
+    }
 
-            Class.forName("org.sqlite.JDBC");
+    private void setParameters(PreparedStatement statement, Account account) throws SQLException {
+        statement.setInt(1, account.getAccountNumber());
+        statement.setString(2, account.getCurrency());
+        statement.setString(3, account.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        statement.setString(4, account.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        statement.setFloat(5, account.getInterestRate());
+        statement.setString(6, account.getType());
+    }
 
-            return statement.executeUpdate("DELETE FROM account WHERE accountid = " + element.getId()) > 0;
+    private Account convertToAccount(ResultSet resultSet) throws SQLException{
+        Account account = new Account();
 
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        account.setId(resultSet.getInt("accountid"));
+        account.setAccountNumber(resultSet.getInt("number"));
+        account.setStartDate(LocalDate.parse(resultSet.getString("startdate")));
+        account.setEndDate(LocalDate.parse(resultSet.getString("enddate")));
+        account.setInterestRate(resultSet.getFloat("interestrate"));
+        account.setType(resultSet.getString("type"));
+
+        return account;
     }
 }

@@ -1,9 +1,8 @@
-package mum.edu.databaseLayer;
+package mum.edu.databaseLayer.contextLayer;
 
 import mum.edu.businesslogic.model.Account;
-import mum.edu.databaseLayer.command.DataInvoke;
-import mum.edu.databaseLayer.command.ICommand;
-import mum.edu.databaseLayer.command.StoreCommandFactory;
+import mum.edu.databaseLayer.DataStoreFactory;
+import mum.edu.databaseLayer.dao.IDataManager;
 
 import java.util.List;
 
@@ -39,4 +38,5 @@ public class AccountContextLayer extends IContextLayer<Account> {
 
         return dataManager;
     }
+
 }

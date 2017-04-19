@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS "account";
-CREATE TABLE "account" ("accountid" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , "number" INTEGER NOT NULL , "currency" TEXT NOT NULL , "startdate" DATETIME NOT NULL , "enddate" DATETIME NOT NULL , "interestrate" DOUBLE NOT NULL  DEFAULT 0, "type" TEXT NOT NULL );

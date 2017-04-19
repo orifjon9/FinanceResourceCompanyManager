@@ -1,7 +1,10 @@
-package mum.edu.databaseLayer;
+package mum.edu.databaseLayer.factory;
 
 import mum.edu.businesslogic.model.Account;
-import mum.edu.databaseLayer.dao.AccountManager;
+import mum.edu.businesslogic.model.Balance;
+import mum.edu.businesslogic.model.Customer;
+import mum.edu.businesslogic.model.Transaction;
+import mum.edu.databaseLayer.dao.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +18,9 @@ public class DataStoreFactory implements IDataStoreFactory {
 
     static {
         stores.put(Account.class, new AccountManager());
+        stores.put(Balance.class, new BalanceManager());
+        stores.put(Transaction.class, new TransactionManager());
+        stores.put(Customer.class, new CustomerManager());
     }
 
     private DataStoreFactory(){}
